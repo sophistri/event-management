@@ -1,38 +1,74 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { listEvents } from '../../api/events';
+import EventRow from '../../components/EventRow';
 
-// Placeholder landing page — replace with your real product.
+// Landing page. Rendered inside EventsLayout, so the nav bar is already above it.
 export default function Home() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
+  const [events, setEvents] = useState([]);
+  const [status, setStatus] = useState('loading'); // 'loading' | 'ready' | 'error'
 
-  if (loading) return <div className="page-status">Loading...</div>;
+  useEffect(() => {
+    let cancelled = false;
+    listEvents({ limit: 3 })
+      .then((d) => {
+        if (cancelled) return;
+        setEvents(d.events);
+        setStatus('ready');
+      })
+      .catch(() => !cancelled && setStatus('error'));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading) return <p className="ev-status">Loading...</p>;
 
   return (
-    <div className="home-page">
-      <h1>Your app starts here</h1>
-      <p className="home-subtext">
-        React + Node + MongoDB scaffold, wired up with login and logout.
-      </p>
+    <div>
+      <section className="ev-hero">
+        <h1>{user ? `Welcome back, ${user.name}` : 'Find events, or host your own'}</h1>
+        <p>
+          {user
+            ? 'Create a new event or see what is coming up.'
+            : 'Browse what is coming up, or sign up to create an event of your own.'}
+        </p>
+        <div className="ev-hero-actions">
+          {user ? (
+            <>
+              <Link to="/events/new" className="ev-btn">Create an event</Link>
+              <Link to="/events" className="ev-btn ev-btn--secondary">Browse events</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/events" className="ev-btn">Browse events</Link>
+              <Link to="/signup" className="ev-btn ev-btn--secondary">Sign up</Link>
+            </>
+          )}
+        </div>
+      </section>
 
-      {user ? (
-        <div className="home-actions">
-          <p>
-            Signed in as <strong>{user.name}</strong> (@{user.username})
-          </p>
-          <button onClick={logout} className="auth-button">
-            Log out
-          </button>
+      <section>
+        <div className="ev-section-head">
+          <h2>Coming up</h2>
+          {events.length > 0 && <Link to="/events">See all events</Link>}
         </div>
-      ) : (
-        <div className="home-actions">
-          <Link to="/login" className="auth-button">
-            Log in
-          </Link>
-          <Link to="/signup" className="auth-link-button">
-            Sign up
-          </Link>
-        </div>
-      )}
+
+        {status === 'loading' && <p className="ev-status">Loading...</p>}
+        {status === 'error' && <p className="ev-error">Could not load events.</p>}
+        {status === 'ready' && events.length === 0 && (
+          <p className="ev-empty">No upcoming events yet.</p>
+        )}
+        {events.length > 0 && (
+          <ul className="ev-list">
+            {events.map((ev) => (
+              <EventRow key={ev._id} event={ev} />
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

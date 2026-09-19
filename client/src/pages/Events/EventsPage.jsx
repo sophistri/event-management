@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { listEvents } from '../../api/events';
+import EventRow from '../../components/EventRow';
 
 export default function EventsPage() {
   const [data, setData] = useState({ events: [], page: 1, pages: 0 });
@@ -12,6 +12,7 @@ export default function EventsPage() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
+    setError('');
     listEvents({ q: q || undefined, page })
       .then((d) => !cancelled && setData(d))
       .catch((e) => !cancelled && setError(e.response?.data?.error || 'Failed to load events'))
@@ -23,11 +24,13 @@ export default function EventsPage() {
 
   return (
     <div>
-      <h1>Events</h1>
-      <Link to="/events/new">Create event</Link>
+      <h1>Upcoming events</h1>
 
       <input
-        placeholder="Search events..."
+        type="search"
+        className="ev-input ev-search"
+        placeholder="Search by title"
+        aria-label="Search events by title"
         value={q}
         onChange={(e) => {
           setQ(e.target.value);
@@ -35,25 +38,43 @@ export default function EventsPage() {
         }}
       />
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-      {!loading && data.events.length === 0 && <p>No upcoming events.</p>}
+      {error && <p className="ev-error">{error}</p>}
+      {loading && <p className="ev-status">Loading...</p>}
+      {!loading && !error && data.events.length === 0 && (
+        <p className="ev-empty">
+          {q ? 'No upcoming events match your search.' : 'No upcoming events yet.'}
+        </p>
+      )}
 
-      <ul>
-        {data.events.map((ev) => (
-          <li key={ev._id}>
-            <Link to={`/events/${ev._id}`}>{ev.title}</Link>
-            {' — '}
-            {new Date(ev.startsAt).toLocaleString()} @ {ev.location}
-          </li>
-        ))}
-      </ul>
+      {data.events.length > 0 && (
+        <ul className="ev-list">
+          {data.events.map((ev) => (
+            <EventRow key={ev._id} event={ev} />
+          ))}
+        </ul>
+      )}
 
       {data.pages > 1 && (
-        <div>
-          <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>Prev</button>
-          <span> {page} / {data.pages} </span>
-          <button disabled={page >= data.pages} onClick={() => setPage((p) => p + 1)}>Next</button>
+        <div className="ev-pager">
+          <button
+            type="button"
+            className="ev-btn ev-btn--secondary"
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Previous
+          </button>
+          <span>
+            Page {page} of {data.pages}
+          </span>
+          <button
+            type="button"
+            className="ev-btn ev-btn--secondary"
+            disabled={page >= data.pages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
         </div>
       )}
     </div>
