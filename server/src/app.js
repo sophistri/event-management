@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
+import eventRoutes from "./routes/event.routes.js"
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cookieParser());
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
 // Add feature routes above this line as the app grows, e.g.:
 // app.use('/api/things', thingsRoutes);
