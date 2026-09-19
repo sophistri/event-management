@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
-import { dayOfMonth, weekdayAndTime, monthShort } from '../../utils/dates';
+import { dayOfMonth, monthShort, weekdayAndTime } from '../../utils/dates';
 
 // One row in an events list: date block, title, time and place, category tag.
 // Render inside <ul className="ev-list">.
 export default function EventRow({ event }) {
+  const count = event.attendeeCount ?? 0;
+
   return (
     <li>
       <Link to={`/events/${event._id}`} className="ev-item">
@@ -16,6 +18,11 @@ export default function EventRow({ event }) {
           <p className="ev-item-meta">
             <span>{weekdayAndTime(event.startsAt)}</span>
             <span>{event.location}</span>
+            {event.capacity != null ? (
+              <span>{count} of {event.capacity} registered</span>
+            ) : (
+              count > 0 && <span>{count} registered</span>
+            )}
           </p>
         </div>
         {event.category && <span className="ev-tag">{event.category}</span>}

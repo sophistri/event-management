@@ -329,6 +329,59 @@ textarea.ev-input {
   gap: 0.75rem;
 }
 
+/* ---------- Registration ---------- */
+
+.ev-register {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.ev-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.ev-attendees {
+  margin-top: 2.5rem;
+}
+
+.ev-attendees h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.ev-attendee-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.ev-attendee-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+}
+
+.ev-attendee-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.ev-attendee-username {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 /* ---------- Create / edit form ---------- */
 
 .ev-form {

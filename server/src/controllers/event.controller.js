@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Event from '../models/Event.js';
+import Attendance from '../models/Attendance.js';
 
 const ALLOWED = ['title', 'description', 'location', 'category', 'startsAt', 'endsAt', 'capacity'];
 
@@ -60,7 +61,13 @@ export async function getEvent(req, res, next) {
     }
     const event = await Event.findById(req.params.id).populate('organizer', 'username');
     if (!event) return res.status(404).json({ error: 'Event not found' });
-    res.json(event);
+
+    // req.userId is only set if the visitor is logged in (see optionalAuthenticate)
+    const isRegistered = req.userId
+      ? Boolean(await Attendance.exists({ event: event._id, user: req.userId }))
+      : false;
+
+    res.json({ ...event.toObject(), isRegistered });
   } catch (err) {
     handleError(err, res, next);
   }
@@ -81,6 +88,11 @@ export async function updateEvent(req, res, next) {
     if (event.endsAt <= event.startsAt) {
       return res.status(400).json({ error: 'endsAt must be after startsAt' });
     }
+    if (event.capacity != null && event.capacity < event.attendeeCount) {
+      return res.status(400).json({
+        error: `Capacity cannot be lower than the ${event.attendeeCount} people already registered`,
+      });
+    }
     await event.save();
     res.json(event);
   } catch (err) {
@@ -98,6 +110,7 @@ export async function deleteEvent(req, res, next) {
     if (!event.organizer.equals(req.userId)) {
       return res.status(403).json({ error: 'Not your event' });
     }
+    await Attendance.deleteMany({ event: event._id });
     await event.deleteOne();
     res.status(204).end();
   } catch (err) {
