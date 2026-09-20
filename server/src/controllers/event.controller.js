@@ -34,7 +34,8 @@ export async function listEvents(req, res, next) {
     const filter = {};
     if (q) filter.title = { $regex: escapeRegex(String(q)), $options: 'i' };
     if (category) filter.category = String(category);
-    if (upcoming === 'true') filter.startsAt = { $gte: new Date() };
+    // "Upcoming" includes events that are under way, i.e. not finished yet (same rule as the dashboards)
+    if (upcoming === 'true') filter.endsAt = { $gte: new Date() };
 
     const p = Math.max(1, parseInt(page, 10) || 1);
     const l = Math.min(50, Math.max(1, parseInt(limit, 10) || 12));

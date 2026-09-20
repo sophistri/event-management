@@ -5,10 +5,13 @@ import { dayOfMonth, monthShort, weekdayAndTime } from '../../utils/dates';
 // Render inside <ul className="ev-list">.
 export default function EventRow({ event }) {
   const count = event.attendeeCount ?? 0;
+  const now = new Date();
+  const past = new Date(event.endsAt) < now;
+  const live = !past && new Date(event.startsAt) <= now;
 
   return (
     <li>
-      <Link to={`/events/${event._id}`} className="ev-item">
+      <Link to={`/events/${event._id}`} className={past ? "ev-item ev-item--past" : "ev-item"}>
         <div className="ev-date" aria-hidden="true">
           <span className="ev-date-month">{monthShort(event.startsAt)}</span>
           <span className="ev-date-day">{dayOfMonth(event.startsAt)}</span>
@@ -25,6 +28,7 @@ export default function EventRow({ event }) {
             )}
           </p>
         </div>
+        {live && <span className="ev-tag ev-tag--live">Happening now</span>}
         {event.category && <span className="ev-tag">{event.category}</span>}
       </Link>
     </li>

@@ -39,15 +39,26 @@
   text-decoration: none;
 }
 
-.events-nav-link {
+.events-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
   margin-right: auto;
+}
+
+.events-nav-link {
   color: var(--muted);
   font-size: 0.95rem;
   text-decoration: none;
 }
 
-.events-nav-link:hover {
+.events-nav-link:hover,
+.events-nav-link[aria-current="page"] {
   color: var(--ink);
+}
+
+.events-nav-link[aria-current="page"] {
+  font-weight: 600;
 }
 
 .events-nav-link:focus-visible {
@@ -261,6 +272,12 @@ textarea.ev-input {
   font-size: 0.8rem;
 }
 
+.ev-tag--live {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .ev-pager {
   display: flex;
   align-items: center;
@@ -327,6 +344,25 @@ textarea.ev-input {
 .ev-actions {
   display: flex;
   gap: 0.75rem;
+}
+
+/* ---------- Dashboards ---------- */
+
+.ev-group + .ev-group {
+  margin-top: 2rem;
+}
+
+.ev-group h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.ev-item--past {
+  opacity: 0.65;
+}
+
+.ev-empty p {
+  margin: 0 0 1rem;
 }
 
 /* ---------- Registration ---------- */

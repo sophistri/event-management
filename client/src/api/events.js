@@ -12,3 +12,7 @@ export const cancelRsvp = (id) => api.delete(`/events/${id}/rsvp`).then((r) => r
 
 // Organizer only. Resolves to an array of { _id, name, username, registeredAt }.
 export const listAttendees = (id) => api.get(`/events/${id}/attendees`).then((r) => r.data.attendees);
+
+// Dashboards. Both resolve to { events: [...] }.
+export const myEvents = () => api.get("/me/events").then((r) => r.data);
+export const myRegistrations = () => api.get("/me/registrations").then((r) => r.data);

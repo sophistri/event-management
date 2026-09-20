@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import '../pages/Events/Events.css';
 
@@ -17,9 +17,24 @@ export default function EventsLayout() {
     <div className="events-shell">
       <header className="events-nav">
         <div className="events-nav-inner">
-          <Link to="/events" className="events-brand">
+          <Link to="/" className="events-brand">
             Event Management
           </Link>
+          <nav className="events-nav-links">
+            <NavLink to="/events" end className="events-nav-link">
+              Events
+            </NavLink>
+            {user && (
+              <>
+                <NavLink to="/my/events" className="events-nav-link">
+                  My events
+                </NavLink>
+                <NavLink to="/my/registrations" className="events-nav-link">
+                  My registrations
+                </NavLink>
+              </>
+            )}
+          </nav>
 
           {!loading &&
             (user ? (

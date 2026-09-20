@@ -8,6 +8,8 @@ import EventsLayout from '../components/EventsLayout';
 import EventsPage from '../pages/Events/EventsPage';
 import EventFormPage from '../pages/Events/EventFormPage';
 import EventDetailPage from '../pages/Events/EventDetailPage';
+import MyEventsPage from '../pages/Dashboard/MyEventsPage';
+import MyRegistrationsPage from '../pages/Dashboard/MyRegistrationsPage';
 
 export default function AppRoutes() {
   return (
@@ -21,10 +23,12 @@ export default function AppRoutes() {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetailPage />} />
 
-        {/* Login required for these two (ProtectedRoute renders an <Outlet />) */}
+        {/* Login required for these (ProtectedRoute renders an <Outlet />) */}
         <Route element={<ProtectedRoute />}>
           <Route path="/events/new" element={<EventFormPage />} />
           <Route path="/events/:id/edit" element={<EventFormPage />} />
+          <Route path="/my/events" element={<MyEventsPage />} />
+          <Route path="/my/registrations" element={<MyRegistrationsPage />} />
         </Route>
       </Route>
     </Routes>
