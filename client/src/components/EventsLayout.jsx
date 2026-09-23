@@ -32,6 +32,9 @@ export default function EventsLayout() {
                 <NavLink to="/my/registrations" className="events-nav-link">
                   My registrations
                 </NavLink>
+                <NavLink to="/my/analytics" className="events-nav-link">
+                  Analytics
+                </NavLink>
               </>
             )}
           </nav>

@@ -10,6 +10,7 @@ import EventFormPage from '../pages/Events/EventFormPage';
 import EventDetailPage from '../pages/Events/EventDetailPage';
 import MyEventsPage from '../pages/Dashboard/MyEventsPage';
 import MyRegistrationsPage from '../pages/Dashboard/MyRegistrationsPage';
+import AnalyticsPage from '../pages/Dashboard/AnalyticsPage';
 
 export default function AppRoutes() {
   return (
@@ -29,6 +30,7 @@ export default function AppRoutes() {
           <Route path="/events/:id/edit" element={<EventFormPage />} />
           <Route path="/my/events" element={<MyEventsPage />} />
           <Route path="/my/registrations" element={<MyRegistrationsPage />} />
+          <Route path="/my/analytics" element={<AnalyticsPage />} />
         </Route>
       </Route>
     </Routes>

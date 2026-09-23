@@ -16,3 +16,4 @@ export const listAttendees = (id) => api.get(`/events/${id}/attendees`).then((r)
 // Dashboards. Both resolve to { events: [...] }.
 export const myEvents = () => api.get("/me/events").then((r) => r.data);
 export const myRegistrations = () => api.get("/me/registrations").then((r) => r.data);
+export const myAnalytics = () => api.get("/me/analytics").then((r) => r.data);
