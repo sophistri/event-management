@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getEvent, deleteEvent, rsvp, cancelRsvp, listAttendees } from '../../api/events';
 import { useAuth } from '../../hooks/useAuth';
 import { formatRange } from '../../../utils/dates';
+import PixelIcon from '../../components/PixelIcon';
 
 export default function EventDetailPage() {
   const { id } = useParams();
@@ -99,7 +100,10 @@ export default function EventDetailPage() {
       <div className="ev-register">
         {event.isRegistered ? (
           <>
-            <p className="ev-note">You are registered for this event.</p>
+            <p className="ev-note">
+              <PixelIcon name="heart" size={3} />
+              You are registered for this event.
+            </p>
             <button
               type="button"
               className="ev-btn ev-btn--secondary"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { listEvents } from '../../api/events';
 import EventRow from '../../components/EventRow';
+import PixelIcon from '../../components/PixelIcon';
 
 export default function EventsPage() {
   const [data, setData] = useState({ events: [], page: 1, pages: 0 });
@@ -41,9 +42,10 @@ export default function EventsPage() {
       {error && <p className="ev-error">{error}</p>}
       {loading && <p className="ev-status">Loading...</p>}
       {!loading && !error && data.events.length === 0 && (
-        <p className="ev-empty">
-          {q ? 'No upcoming events match your search.' : 'No upcoming events yet.'}
-        </p>
+        <div className="ev-empty">
+          <PixelIcon name="folder" size={4} />
+          <p>{q ? 'No upcoming events match your search.' : 'No upcoming events yet.'}</p>
+        </div>
       )}
 
       {data.events.length > 0 && (

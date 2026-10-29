@@ -11,6 +11,32 @@ import {
   Tooltip,
 } from "recharts";
 import { myAnalytics } from "../../api/events";
+import PixelIcon from "../../components/PixelIcon";
+
+const FONT = "VT323, monospace";
+const tick = (fill) => ({ fill, fontSize: 16, fontFamily: FONT });
+const tooltipBox = {
+  background: "var(--surface)",
+  border: "3px solid var(--ink)",
+  borderRadius: 0,
+  boxShadow: "3px 3px 0 var(--ink)",
+  fontFamily: FONT,
+  fontSize: 16,
+};
+
+// Event names on the bar chart's y-axis. Drawn by hand so they never wrap, even
+// before the pixel font has finished loading (Recharts measures text up front).
+const EventTick = ({ x, y, payload }) => (
+  <text x={x - 8} y={y} dy={5} textAnchor="end" fill="var(--ink)" fontFamily={FONT} fontSize={16}>
+    {payload.value}
+  </text>
+);
+
+// Square data points to match the pixel look
+const SquareDot = ({ cx, cy }) =>
+  cx == null ? null : (
+    <rect x={cx - 4} y={cy - 4} width={8} height={8} fill="var(--mustard)" stroke="var(--ink)" strokeWidth={2} />
+  );
 
 const pct = (n) => (n == null ? "N/A" : `${Math.round(n * 100)}%`);
 
@@ -41,9 +67,10 @@ export default function AnalyticsPage() {
     return (
       <div>
         <h1>Analytics</h1>
-        <p className="ev-empty">
-          Create an event and get some registrations to see participation trends here.
-        </p>
+        <div className="ev-empty">
+          <PixelIcon name="folder" size={4} />
+          <p>Create an event and get some registrations to see participation trends here.</p>
+        </div>
       </div>
     );
   }
@@ -79,14 +106,14 @@ export default function AnalyticsPage() {
         {trend.length > 0 ? (
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={trend} margin={{ top: 8, right: 16, left: -16, bottom: 0 }}>
-              <CartesianGrid stroke="var(--line)" vertical={false} />
-              <XAxis dataKey="label" tick={{ fill: "var(--muted)", fontSize: 12 }} />
-              <YAxis allowDecimals={false} tick={{ fill: "var(--muted)", fontSize: 12 }} />
+              <CartesianGrid stroke="var(--line)" strokeDasharray="4 4" vertical={false} />
+              <XAxis dataKey="label" tick={tick("var(--muted)")} stroke="var(--ink)" strokeWidth={2} />
+              <YAxis allowDecimals={false} tick={tick("var(--muted)")} stroke="var(--ink)" strokeWidth={2} />
               <Tooltip
                 formatter={(value) => [value, "Registrations"]}
-                contentStyle={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 8 }}
+                contentStyle={tooltipBox}
               />
-              <Line type="monotone" dataKey="registrations" stroke="var(--accent)" strokeWidth={2} dot={false} />
+              <Line type="stepAfter" dataKey="registrations" stroke="var(--accent)" strokeWidth={4} dot={<SquareDot />} activeDot={<SquareDot />} />
             </LineChart>
           </ResponsiveContainer>
         ) : (
@@ -98,18 +125,18 @@ export default function AnalyticsPage() {
         <h2>Attendance by event</h2>
         <ResponsiveContainer width="100%" height={Math.max(220, topEvents.length * 42)}>
           <BarChart data={topEvents} layout="vertical" margin={{ top: 8, right: 24, left: 8, bottom: 0 }}>
-            <CartesianGrid stroke="var(--line)" horizontal={false} />
-            <XAxis type="number" allowDecimals={false} tick={{ fill: "var(--muted)", fontSize: 12 }} />
-            <YAxis type="category" dataKey="label" width={140} tick={{ fill: "var(--ink)", fontSize: 12 }} />
+            <CartesianGrid stroke="var(--line)" strokeDasharray="4 4" horizontal={false} />
+            <XAxis type="number" allowDecimals={false} tick={tick("var(--muted)")} stroke="var(--ink)" strokeWidth={2} />
+            <YAxis type="category" dataKey="label" width={160} tick={<EventTick />} stroke="var(--ink)" strokeWidth={2} />
             <Tooltip
               formatter={(value, _name, ctx) => {
                 const cap = ctx.payload.capacity;
                 return [cap != null ? `${value} of ${cap}` : value, "Registered"];
               }}
               labelFormatter={(_label, ctx) => ctx?.[0]?.payload?.title || ""}
-              contentStyle={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 8 }}
+              contentStyle={tooltipBox}
             />
-            <Bar dataKey="registrations" fill="var(--accent)" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="registrations" fill="var(--mustard)" stroke="var(--ink)" strokeWidth={3} radius={0} />
           </BarChart>
         </ResponsiveContainer>
       </section>

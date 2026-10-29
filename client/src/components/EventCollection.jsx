@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EventRow from "./EventRow";
+import PixelIcon from "./PixelIcon";
 
 // A titled page that loads a set of events and splits them into Upcoming and Past.
 // `load` is an API function that resolves to { events }. Used by both dashboards.
@@ -36,6 +37,7 @@ export default function EventCollection({ title, load, emptyText, emptyAction })
 
       {events && events.length === 0 && (
         <div className="ev-empty">
+          <PixelIcon name="folder" size={4} />
           <p>{emptyText}</p>
           <Link to={emptyAction.to} className="ev-btn">
             {emptyAction.label}

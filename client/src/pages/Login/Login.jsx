@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import PixelWindow from '../../components/PixelWindow';
+import PixelIcon from '../../components/PixelIcon';
 
 export default function Login() {
   const [form, setForm] = useState({ identifier: '', password: '' });
@@ -29,7 +31,11 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <h2>Log in</h2>
+      <PixelWindow title="login.exe">
+      <h2>
+        <PixelIcon name="star" size={3} />
+        Log in
+      </h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           name="identifier"
@@ -38,7 +44,7 @@ export default function Login() {
           value={form.identifier}
           onChange={handleChange}
           required
-          className="auth-input"
+          className="ev-input"
         />
         <input
           name="password"
@@ -47,16 +53,17 @@ export default function Login() {
           value={form.password}
           onChange={handleChange}
           required
-          className="auth-input"
+          className="ev-input"
         />
         {error && <p className="auth-error">{error}</p>}
-        <button type="submit" className="auth-button" disabled={submitting}>
+        <button type="submit" className="ev-btn" disabled={submitting}>
           {submitting ? 'Logging in...' : 'Log in'}
         </button>
       </form>
       <p className="auth-footer">
         Don't have an account? <Link to="/signup">Sign up</Link>
       </p>
+      </PixelWindow>
     </div>
   );
 }

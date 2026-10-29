@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { signup } from '../../api/auth';
+import PixelWindow from '../../components/PixelWindow';
+import PixelIcon from '../../components/PixelIcon';
 
 export default function Signup() {
   const [form, setForm] = useState({ name: '', email: '', username: '', password: '' });
@@ -33,7 +35,11 @@ export default function Signup() {
 
   return (
     <div className="auth-page">
-      <h2>Sign up</h2>
+      <PixelWindow title="signup.exe">
+      <h2>
+        <PixelIcon name="heart" size={3} />
+        Sign up
+      </h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           name="name"
@@ -42,7 +48,7 @@ export default function Signup() {
           value={form.name}
           onChange={handleChange}
           required
-          className="auth-input"
+          className="ev-input"
         />
         <input
           name="email"
@@ -51,7 +57,7 @@ export default function Signup() {
           value={form.email}
           onChange={handleChange}
           required
-          className="auth-input"
+          className="ev-input"
         />
         <input
           name="username"
@@ -62,7 +68,7 @@ export default function Signup() {
           required
           minLength={3}
           maxLength={24}
-          className="auth-input"
+          className="ev-input"
         />
         <input
           name="password"
@@ -72,16 +78,17 @@ export default function Signup() {
           onChange={handleChange}
           required
           minLength={8}
-          className="auth-input"
+          className="ev-input"
         />
         {error && <p className="auth-error">{error}</p>}
-        <button type="submit" className="auth-button" disabled={submitting}>
+        <button type="submit" className="ev-btn" disabled={submitting}>
           {submitting ? 'Creating account...' : 'Sign up'}
         </button>
       </form>
       <p className="auth-footer">
         Already have an account? <Link to="/login">Log in</Link>
       </p>
+      </PixelWindow>
     </div>
   );
 }
