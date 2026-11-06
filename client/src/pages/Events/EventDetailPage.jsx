@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getEvent, deleteEvent, rsvp, cancelRsvp, listAttendees } from '../../api/events';
 import { useAuth } from '../../hooks/useAuth';
-import { formatRange } from '../../../utils/dates';
+import { formatRange } from '../../utils/dates';
 import PixelIcon from '../../components/PixelIcon';
 
 export default function EventDetailPage() {

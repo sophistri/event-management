@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { dayOfMonth, monthShort, weekdayAndTime } from '../../utils/dates';
+import { dayOfMonth, monthShort, weekdayAndTime } from '../utils/dates';
 
 // One row in an events list: date block, title, time and place, category tag.
 // Render inside <ul className="ev-list">.
